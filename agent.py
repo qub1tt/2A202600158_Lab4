@@ -63,6 +63,8 @@ if __name__ == "__main__":
     print("  Gõ 'quit' để thoát")
     print("=" * 60)
 
+    history = []
+
     while True:
         user_input = input("\nBạn: ").strip()
         if not user_input:
@@ -71,10 +73,13 @@ if __name__ == "__main__":
             print("Tạm biệt! Chúc bạn có chuyến đi vui vẻ!")
             break
 
+        history.append(("human", user_input))
+
         print("\nTravelBuddy đang suy nghĩ...")
         try:
-            result = graph.invoke({"messages": [("human", user_input)]})
+            result = graph.invoke({"messages": history})
             final = result["messages"][-1]
+            history = result["messages"]  # cập nhật lịch sử đầy đủ từ graph
             print(f"\nTravelBuddy: {final.content}")
         except Exception as e:
             print(f"\n[Lỗi] {e}")
